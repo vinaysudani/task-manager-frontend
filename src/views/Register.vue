@@ -1,5 +1,146 @@
 <template>
-    <div>
-        <h1>Register page</h1>
+    <div class="row mt-4">
+        <div class="card col-lg-6 m-auto p-1">
+            <div class="card-body">
+                <h1 class="text-center">Register</h1>
+                <hr>
+                <div v-if="error_message" class="alert alert-danger" role="alert">
+                    {{ error_message }}
+                </div>
+                <form @submit.prevent="register">
+                    <div class="form-group">
+                        <label for="name">Name*</label>
+                        <input
+                            type="text" 
+                            class="form-control"
+                            :class="{ 'is-invalid' : formErrors.name }" 
+                            id="name"
+                            v-model="name"
+                            >
+                        <div class="invalid-feedback" v-if="formErrors.name">
+                            {{ formErrors.name }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email*</label>
+                        <input 
+                            type="text" 
+                            class="form-control" 
+                            :class="{ 'is-invalid' : formErrors.email }" 
+                            id="email"
+                            v-model="email">
+                        <div class="invalid-feedback" v-if="formErrors.email">
+                            {{ formErrors.email }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="age">Age</label>
+                        <input 
+                            type="text" 
+                            class="form-control"
+                            :class="{ 'is-invalid' : formErrors.age }" 
+                            id="age"
+                            v-model="age"
+                            >
+                        <div class="invalid-feedback" v-if="formErrors.age">
+                            {{ formErrors.age }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password*</label>
+                        <input 
+                            type="password" 
+                            class="form-control"
+                            :class="{ 'is-invalid' : formErrors.password }" 
+                            id="password"
+                            v-model="password"
+                            >
+                        <div class="invalid-feedback" v-if="formErrors.password">
+                            {{ formErrors.password }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm_password">Confirm password*</label>
+                        <input 
+                            type="password" 
+                            class="form-control"
+                            :class="{ 'is-invalid' : formErrors.confirm_password }" 
+                            id="confirm_password"
+                            v-model="confirm_password"
+                            >
+                        <div class="invalid-feedback" v-if="formErrors.confirm_password">
+                            {{ formErrors.confirm_password }}
+                        </div>
+                    </div>
+                    <button 
+                        type="submit" 
+                        class="btn btn-primary"
+                        :disabled="submitting"
+                        >Submit <span v-if="submitting" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    </button>
+                </form>
+            </div>
+        </div>
     </div>
 </template>
+
+<script>
+import axios from 'axios'
+
+export default {
+    data: function() {
+        return {
+            name: '',
+            email: '',
+            age: '',
+            password: '',
+            confirm_password: '',
+            formErrors: {},
+            error_message: '',
+            submitting: false,
+        }
+    },
+    methods: {
+        register() {
+            this.submitting = true
+            let registrationData = {
+                name: this.name,
+                email: this.email,
+                password: this.password,
+                confirm_password: this.confirm_password
+            }
+            if (this.age) {
+                registrationData.age = this.age
+            }
+
+            axios.post('/users', registrationData)
+                .then(res => {
+                    let data = res.data
+                    this.$toast.success(data.message)
+                    
+                    let authData = {
+                        token: data.token,
+                        userName: data.user.name
+                    }
+                    this.$store.dispatch('setAuthData', authData)
+                    
+                    this.$router.push({ name: 'home'})
+
+                    this.formErrors = {}
+                    this.error_message = ''
+                    this.submitting = false
+                })
+                .catch(error => {
+                    if (error.response && error.response.data) {
+                        let data = error.response.data
+                        this.formErrors = data.errors
+                        this.error_message = data.message
+                    } else {
+                        this.$toast.error('Something went wrong')
+                    }
+                    this.submitting = false
+                })
+        }
+    }
+}
+</script>
