@@ -1,6 +1,6 @@
 <template>
     <div class="row mt-4">
-        <div class="card col-lg-6 m-auto p-1">
+        <div class="card m-auto p-1 m-1" style="width:450px">
             <div class="card-body">
                 <h1 class="text-center">Register</h1>
                 <hr>
@@ -116,7 +116,12 @@ export default {
             axios.post('/users', registrationData)
                 .then(res => {
                     let data = res.data
-                    this.$toast.success(data.message)
+                    this.$bvToast.toast(data.message, {
+                        title: 'Success',
+                        variant: 'success',
+                        solid: true,
+                        toaster: 'b-toaster-top-center'
+                    })
                     
                     let authData = {
                         token: data.token,
@@ -136,7 +141,12 @@ export default {
                         this.formErrors = data.errors
                         this.error_message = data.message
                     } else {
-                        this.$toast.error('Something went wrong')
+                        this.$bvToast.toast('Something went wrong', {
+                            title: 'Error',
+                            variant: 'danger',
+                            solid: true,
+                            toaster: 'b-toaster-top-center'
+                        })
                     }
                     this.submitting = false
                 })

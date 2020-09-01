@@ -1,5 +1,5 @@
 <template>
-    <nav class="navbar navbar-expand navbar-light" style="background-color: #e3f2fd;">
+    <nav class="navbar navbar-expand navbar-dark bg-primary">
         <router-link :to="{ name: 'home' }" class="navbar-brand">Task Manager</router-link>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
