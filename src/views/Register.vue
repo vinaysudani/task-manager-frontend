@@ -4,7 +4,7 @@
             <div class="card-body">
                 <h1 class="text-center">Register</h1>
                 <hr>
-                <div v-if="error_message" class="alert alert-danger" role="alert">
+                <div v-if="error_message" class="alert alert-danger text-center" role="alert">
                     {{ error_message }}
                 </div>
                 <form @submit.prevent="register">
@@ -136,17 +136,17 @@ export default {
                     this.submitting = false
                 })
                 .catch(error => {
-                    if (error.response && error.response.data) {
+                   if (error.response && error.response.data && error.response.data.errors) {
                         let data = error.response.data
                         this.formErrors = data.errors
                         this.error_message = data.message
                     } else {
-                        this.$bvToast.toast('Something went wrong', {
-                            title: 'Error',
-                            variant: 'danger',
-                            solid: true,
-                            toaster: 'b-toaster-top-center'
-                        })
+                        let message = 'Something went wrong'
+                        if (error.response && error.response.data && error.response.data.message) {
+                            message = error.response.data.message
+                        }
+                        this.error_message = message
+                        this.formErrors = {}
                     }
                     this.submitting = false
                 })
