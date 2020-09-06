@@ -1,10 +1,15 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import multiguard from 'vue-router-multiguard'
+
 import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
 import Profile from '../views/Profile.vue'
 import Tasks from '../views/Tasks.vue'
+
+import auth from '../middleware/auth'
+import guest from '../middleware/guest'
 
 Vue.use(VueRouter)
 
@@ -17,22 +22,28 @@ const routes = [
     {
         path: '/login',
         name: 'login',
-        component: Login
+        component: Login,
+        beforeEnter: multiguard([guest]),
     },
     {
         path: '/register',
         name: 'register',
-        component: Register
+        component: Register,
+        beforeEnter: multiguard([guest]),
     },
     {
         path: '/profile',
         name: 'profile',
-        component: Profile
+        component: Profile,
+        meta: { requiresAuth: true },
+        beforeEnter: multiguard([auth]),
     },
     {
         path: '/tasks',
         name: 'tasks',
-        component: Tasks
+        component: Tasks,
+        meta: { requiresAuth: true },
+        beforeEnter: multiguard([auth]),
     }
 ]
 
