@@ -40,7 +40,7 @@
                     activeClass="active"
                     :to="{ name: 'profile' }"
                     >
-                    <a class="nav-link">Profile</a>
+                    <a class="nav-link">{{ userName }}</a>
                 </router-link>
             </ul>
         </div>
@@ -52,6 +52,9 @@ export default {
     computed: {
         isAuthenticated() {
             return this.$store.getters.isAuthenticated
+        },
+        userName() {
+            return this.$store.getters.userName
         }
     }
 }

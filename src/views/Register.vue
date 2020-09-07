@@ -123,7 +123,11 @@ export default {
                         toaster: 'b-toaster-top-center'
                     })
 
-                    this.$store.dispatch('setAuthData', data.token)
+                    let authData = {
+                        token: data.token,
+                        userName: data.user.name
+                    }
+                    this.$store.dispatch('setAuthData', authData)
                     
                     this.$router.push({ name: 'home'})
 

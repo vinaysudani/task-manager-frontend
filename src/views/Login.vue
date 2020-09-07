@@ -69,7 +69,12 @@ export default {
             axios.post('/users/login', loginData)
                 .then(res => {
                     let data = res.data
-                    this.$store.dispatch('setAuthData', data.token)
+
+                    let authData = {
+                        token: data.token,
+                        userName: data.user.name
+                    }
+                    this.$store.dispatch('setAuthData', authData)
                     
                     this.$router.push({ name: 'home'})
 
