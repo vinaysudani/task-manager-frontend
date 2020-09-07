@@ -1,24 +1,22 @@
 const state = {
-    token: null,
-    userName: null,
+    jwt: null
 }
 
 const mutations = {
-    'SET_AUTH_DATA' (state, authData) {
-        state.token = authData.token
-        state.userName = authData.userName
+    'SET_AUTH_DATA' (state, jwt) {
+        state.jwt = jwt
     }
 }
 
 const actions = {
-    setAuthData({ commit }, authData) {
-        commit('SET_AUTH_DATA', authData)
+    setAuthData({ commit }, jwt) {
+        commit('SET_AUTH_DATA', jwt)
     }
 }
 
 const getters = {
     isAuthenticated(state) {
-        return state.token ? true : false
+        return state.jwt ? true : false
     }
 }
 

@@ -122,12 +122,8 @@ export default {
                         solid: true,
                         toaster: 'b-toaster-top-center'
                     })
-                    
-                    let authData = {
-                        token: data.token,
-                        userName: data.user.name
-                    }
-                    this.$store.dispatch('setAuthData', authData)
+
+                    this.$store.dispatch('setAuthData', data.token)
                     
                     this.$router.push({ name: 'home'})
 
