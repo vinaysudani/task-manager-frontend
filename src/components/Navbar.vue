@@ -33,15 +33,23 @@
                     >
                     <a class="nav-link">Register</a>
                 </router-link>
-                <router-link
+
+                <b-dropdown
                     v-if="isAuthenticated"
-                    tag="li"
-                    class="nav-item"
-                    activeClass="active"
-                    :to="{ name: 'profile' }"
+                    right 
+                    :text="userName" 
+                    variant="primary"
                     >
-                    <a class="nav-link">{{ userName }}</a>
-                </router-link>
+                    <router-link
+                        :to="{ name: 'profile' }"
+                        v-slot="{ navigate, isActive }"
+                        >
+                        <b-dropdown-item :active="isActive" @click="navigate">Profile</b-dropdown-item>
+                    </router-link>
+
+                    <b-dropdown-item href="#">Logout</b-dropdown-item>
+                    <b-dropdown-item href="#">Logout All</b-dropdown-item>
+                </b-dropdown>
             </ul>
         </div>
     </nav>
