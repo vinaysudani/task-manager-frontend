@@ -47,7 +47,7 @@
                         <b-dropdown-item :active="isActive" @click="navigate">Profile</b-dropdown-item>
                     </router-link>
 
-                    <b-dropdown-item href="#">Logout</b-dropdown-item>
+                    <b-dropdown-item href="#" @click="logout">Logout</b-dropdown-item>
                     <b-dropdown-item href="#">Logout All</b-dropdown-item>
                 </b-dropdown>
             </ul>
@@ -56,6 +56,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
     computed: {
         isAuthenticated() {
@@ -63,6 +65,40 @@ export default {
         },
         userName() {
             return this.$store.getters.userName
+        }
+    },
+    methods: {
+        logout() {
+            axios.post('/users/logout')
+                .then(res => {
+                    let data = res.data
+                    this.$bvToast.toast(data.message, {
+                        title: 'Success',
+                        variant: 'success',
+                        solid: true,
+                        toaster: 'b-toaster-top-center'
+                    })
+
+                    let authData = {
+                        token: null,
+                        userName: null
+                    }
+                    this.$store.dispatch('setAuthData', authData)
+                    this.$router.push({ name: 'login'})
+                })
+                .catch(error => {
+                    let message = 'Something went wrong'
+                    if (error.response && error.response.data && error.response.data.message) {
+                        message = error.response.data.message
+                    }
+
+                    this.$bvToast.toast(message, {
+                        title: 'Error',
+                        variant: 'danger',
+                        solid: true,
+                        toaster: 'b-toaster-top-center'
+                    })
+                })
         }
     }
 }

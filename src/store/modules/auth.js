@@ -1,3 +1,5 @@
+import axios from 'axios'
+
 const state = {
     token: null,
     userName: null
@@ -12,6 +14,11 @@ const mutations = {
 
 const actions = {
     setAuthData({ commit }, authData) {
+        if (authData.token) {
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + authData.token
+        } else {
+            delete axios.defaults.headers.common['Authorization']
+        }
         commit('SET_AUTH_DATA', authData)
     }
 }
