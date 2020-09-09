@@ -76,7 +76,11 @@ export default {
                     }
                     this.$store.dispatch('setAuthData', authData)
                     
-                    this.$router.push({ name: 'home'})
+                    if (this.$route.query.redirect) {
+                        this.$router.push(this.$route.query.redirect)
+                    } else {
+                        this.$router.push({ name: 'tasks'})
+                    }
 
                     this.formErrors = {}
                     this.error_message = ''
