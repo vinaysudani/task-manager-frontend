@@ -28,6 +28,13 @@ export default {
     },
     created() {
         this.refreshAxiosToken(this.authToken)
+        axios.interceptors.response.use(undefined, (error) => {
+            if (error.response && error.response.status === 401) {
+                this.$store.dispatch('setAuthData',  { token: null, userName: null })
+                this.$router.push({ name: 'login' , query: { redirect: this.$route.fullPath }})
+            }
+            return Promise.reject(error)
+        })
     },
     methods: {
         refreshAxiosToken() {
