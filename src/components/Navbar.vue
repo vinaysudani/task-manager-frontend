@@ -72,12 +72,7 @@ export default {
             axios.post('/users/logout')
                 .then(res => {
                     let data = res.data
-                    this.$bvToast.toast(data.message, {
-                        title: 'Success',
-                        variant: 'success',
-                        solid: true,
-                        toaster: 'b-toaster-top-center'
-                    })
+                    this.displayToast('success', data.message)
 
                     let authData = {
                         token: null,
@@ -92,24 +87,14 @@ export default {
                         message = error.response.data.message
                     }
 
-                    this.$bvToast.toast(message, {
-                        title: 'Error',
-                        variant: 'danger',
-                        solid: true,
-                        toaster: 'b-toaster-top-center'
-                    })
+                    this.displayToast('danger', message)
                 })
         },
         logoutAll() {
             axios.post('/users/logoutAll')
                 .then(res => {
                     let data = res.data
-                    this.$bvToast.toast(data.message, {
-                        title: 'Success',
-                        variant: 'success',
-                        solid: true,
-                        toaster: 'b-toaster-top-center'
-                    })
+                    this.displayToast('success', data.message)
 
                     let authData = {
                         token: null,
@@ -123,13 +108,7 @@ export default {
                     if (error.response && error.response.data && error.response.data.message) {
                         message = error.response.data.message
                     }
-
-                    this.$bvToast.toast(message, {
-                        title: 'Error',
-                        variant: 'danger',
-                        solid: true,
-                        toaster: 'b-toaster-top-center'
-                    })
+                    this.displayToast('danger', message)
                 })
         }
     }

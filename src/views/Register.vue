@@ -116,12 +116,7 @@ export default {
             axios.post('/users', registrationData)
                 .then(res => {
                     let data = res.data
-                    this.$bvToast.toast(data.message, {
-                        title: 'Success',
-                        variant: 'success',
-                        solid: true,
-                        toaster: 'b-toaster-top-center'
-                    })
+                    this.displayToast('success', data.message)
 
                     let authData = {
                         token: data.token,
