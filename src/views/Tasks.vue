@@ -1,9 +1,16 @@
 <template>
-    <div>
-        <h1>Tasks page</h1>
-
-        <button class="btn btn-primary" @click="taskFromRecord = {}">Add Task</button>
-
+    <div class="row">
+        <div class="col-12">
+            <h1 class="float-left">Tasks</h1>
+            <button
+                class="btn btn-primary float-right my-2" 
+                @click="taskFromRecord = {}"
+                >
+                Add Task
+            </button>
+        </div>
+        <div class="clear-fix"></div>
+        
         <app-task-form
             v-if="taskFromRecord"
             :task="taskFromRecord"
