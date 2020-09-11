@@ -10,6 +10,10 @@
             </button>
         </div>
         <div class="clear-fix"></div>
+
+        <div class="col-12">
+            <app-tasks></app-tasks>
+        </div>
         
         <app-task-form
             v-if="taskFromRecord"
@@ -22,10 +26,12 @@
 <script>
 
 import TaskForm from '../components/tasks/TaskForm.vue';
+import Tasks from '../components/tasks/Tasks.vue';
 
 export default {
     components: {
         'app-task-form': TaskForm,
+        'app-tasks': Tasks,
     },
     data: function() {
         return {
