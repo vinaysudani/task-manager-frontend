@@ -61,7 +61,7 @@ export default {
     props: ['task'],
     data : function(){
         return {
-            id: this.task.id,
+            id: this.task._id,
             title: this.task.title,
             description: this.task.description,
             isSaving: false,
@@ -85,27 +85,37 @@ export default {
                 title: this.title,
                 description: this.description,
             }
-            axios.post('/tasks', data)
-                .then(res => {
-                    let data = res.data
-                    this.displayToast('success', data.message)
-                    this.hideModal()
-                })
-                .catch(error => {
-                   if (error.response && error.response.data && error.response.data.errors) {
-                        let data = error.response.data
-                        this.formErrors = data.errors
-                        this.error_message = data.message
-                    } else {
-                        let message = 'Something went wrong'
-                        if (error.response && error.response.data && error.response.data.message) {
-                            message = error.response.data.message
-                        }
-                        this.error_message = message
-                        this.formErrors = {}
+            let req;
+            let eventName;
+            if (this.id) {
+                req = axios.patch('/tasks/' + this.id, data)
+                eventName = 'task-updated'
+            } else {
+                req = axios.post('/tasks', data)
+                eventName = 'task-created'
+            }
+            req
+            .then(res => {
+                let data = res.data
+                this.displayToast('success', data.message)
+                this.$emit(eventName)
+                this.hideModal()
+            })
+            .catch(error => {
+                if (error.response && error.response.data && error.response.data.errors) {
+                    let data = error.response.data
+                    this.formErrors = data.errors
+                    this.error_message = data.message
+                } else {
+                    let message = 'Something went wrong'
+                    if (error.response && error.response.data && error.response.data.message) {
+                        message = error.response.data.message
                     }
-                    this.isSaving = false
-                })
+                    this.error_message = message
+                    this.formErrors = {}
+                }
+                this.isSaving = false
+            })
         }
     }
 }
