@@ -18,13 +18,35 @@
             @task-created="fetchTasks"
         ></app-task-form>
 
+        <div class="col-12">
+            <label>Task status:</label>
+            <b-form-group>
+                <b-form-radio-group
+                    v-model="filter.completed"
+                    :options=" [
+                        { text: 'All', value: null },
+                        { text: 'Incomplete', value: false },
+                        { text: 'Complete', value: true }
+                    ]"
+                    buttons
+                    button-variant="outline-primary"
+                ></b-form-radio-group>
+            </b-form-group>
+        </div>
+
         <div class="col-12 text-center my-1" v-if="loading">
             <b-spinner label="Loading..." small variant="secondary"></b-spinner>
         </div>
         <div class="col-12 text-center" v-if="!loading && tasks.length == 0">
             <p>No tasks founds</p>
         </div>
-        <div class="col-12" v-for="task of tasks" :key="task.id">
+
+        <div class="col-12">
+            Displaying: {{ tasks.length }}
+        </div>
+        <div class="col-12" 
+            v-for="task of tasks" 
+            :key="task._id">
             <app-task 
                 :task="task" 
                 @task-updated="fetchTasks"
@@ -48,7 +70,18 @@ export default {
         return {
             tasks: [],
             add_task: false,
-            loading: false
+            loading: false,
+            filter: {
+                completed: false
+            }
+        }
+    },
+    watch: {
+        filter: {
+            handler(){
+                this.fetchTasks()
+            },
+            deep: true
         }
     },
     created() {
@@ -57,7 +90,12 @@ export default {
     methods: {
         fetchTasks() {
             this.loading = true
-            axios.get('/tasks')
+            let data = {
+                ...this.filter
+            }
+            axios.get('/tasks', {
+                    params: data
+                })
                 .then(res => {
                     this.tasks = res.data
                     this.loading = false
