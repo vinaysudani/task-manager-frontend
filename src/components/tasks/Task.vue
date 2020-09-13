@@ -1,20 +1,23 @@
 <template>
     <b-card class="my-1">
         <b-card-text>
-            <b-form-checkbox 
-                size="lg" 
-                class="d-inline-block"
-                value="true"
-                unchecked-value="false"
-                v-model="isCompleted"
-                ></b-form-checkbox>
-            <span>{{ task.title }}</span>
-            <span class="ml-1 text-muted">{{ task.description }}</span>
-
+            <div class="float-left">
+                <b-form-checkbox
+                    size="lg"
+                    class="d-inline-block"
+                    value="true"
+                    unchecked-value="false"
+                    v-model="isCompleted"
+                    ></b-form-checkbox>
+                <span>{{ task.title }}</span>
+                <span class="ml-1 text-muted">{{ task.description }}</span>
+            </div>
             <div class="float-right">
                 <b-button variant="outline-primary" class="mx-1" @click="edit_task = true">Edit</b-button>
                 <b-button variant="outline-danger" @click="delete_task = true">Delete</b-button>
             </div>
+            <div class="clearfix"></div>
+            <p class="text-muted mb-0">{{ lastActivityTime }}</p>
         </b-card-text>
 
         <app-task-form
@@ -37,6 +40,7 @@
 import axios from 'axios'
 import TaskForm from './TaskForm.vue'
 import DeleteTask from './DeleteTask.vue'
+import moment from 'moment'
 
 export default {
     props: ['task'],
@@ -54,6 +58,13 @@ export default {
     watch: {
         isCompleted() {
             this.updateIsCompleted()
+        }
+    },
+    computed: {
+        lastActivityTime() {
+            let label = this.task.createdAt == this.task.updatedAt ? 'Created' : 'Updated'
+            label = label + ' ' + moment(this.task.updatedAt).fromNow()
+            return label
         }
     },
     methods: {
