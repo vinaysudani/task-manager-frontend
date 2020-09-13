@@ -59,6 +59,9 @@ export default {
     methods: {
         updateIsCompleted() {
             axios.patch('/tasks/' + this.task._id, { completed: this.isCompleted })
+                .then(() => {
+                    this.$emit('task-updated')
+                })
                 .catch(error => {
                     let message = 'Something went wrong'
                     if (error.response && error.response.data && error.response.data.message) {
