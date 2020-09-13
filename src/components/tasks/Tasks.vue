@@ -19,19 +19,35 @@
         ></app-task-form>
 
         <div class="col-12">
-            <label>Task status:</label>
-            <b-form-group>
-                <b-form-radio-group
-                    v-model="filter.completed"
-                    :options=" [
-                        { text: 'All', value: null },
-                        { text: 'Incomplete', value: false },
-                        { text: 'Complete', value: true }
-                    ]"
-                    buttons
-                    button-variant="outline-primary"
-                ></b-form-radio-group>
-            </b-form-group>
+            <div class="float-left">
+                <label>Task status:</label>
+                <b-form-group>
+                    <b-form-radio-group
+                        v-model="filter.completed"
+                        :options=" [
+                            { text: 'All', value: null },
+                            { text: 'Incomplete', value: false },
+                            { text: 'Complete', value: true }
+                        ]"
+                        buttons
+                        button-variant="outline-primary"
+                    ></b-form-radio-group>
+                </b-form-group>
+            </div>
+            <div class="float-right">
+                <label>Sort by:</label>
+                 <b-form-group>
+                    <b-form-select 
+                        v-model="filter.sortBy" 
+                        :options="[
+                            { value: 'createdAt:asc', text: 'Created At (Oldest first)' },
+                            { value: 'createdAt:desc', text: 'Created At (Newest first)' },
+                            { value: 'updatedAt:asc', text: 'Updated At (Oldest first)' },
+                            { value: 'updatedAt:desc', text: 'Updated At (Newest first)' },
+                        ]"
+                    ></b-form-select>
+                </b-form-group>
+            </div>
         </div>
 
         <div class="col-12 text-center my-1" v-if="loading">
@@ -72,7 +88,8 @@ export default {
             add_task: false,
             loading: false,
             filter: {
-                completed: false
+                completed: false,
+                sortBy: 'createdAt:asc'
             }
         }
     },
