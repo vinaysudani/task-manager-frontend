@@ -21,6 +21,9 @@
         <div class="col-12 text-center my-1" v-if="loading">
             <b-spinner label="Loading..." small variant="secondary"></b-spinner>
         </div>
+        <div class="col-12 text-center" v-if="!loading && tasks.length == 0">
+            <p>No tasks founds</p>
+        </div>
         <div class="col-12" v-for="task of tasks" :key="task.id">
             <app-task 
                 :task="task" 
