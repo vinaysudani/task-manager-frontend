@@ -13,6 +13,7 @@
                 <span class="ml-1 text-muted">{{ task.description }}</span>
             </div>
             <div class="float-right">
+                <b-button variant="outline-primary" class="mx-1" @click="display_details = true">Details</b-button>
                 <b-button variant="outline-primary" class="mx-1" @click="edit_task = true">Edit</b-button>
                 <b-button variant="outline-danger" @click="delete_task = true">Delete</b-button>
             </div>
@@ -33,25 +34,36 @@
             @modal-close="delete_task = false"
             @task-deleted="$emit('task-deleted')"
         ></app-delete-task>
+
+        <app-task-details
+            v-if="display_details"
+            :task_id="task._id"
+            @modal-close="display_details = false"
+            >
+        </app-task-details>
     </b-card>
 </template>
 
 <script>
 import axios from 'axios'
+import moment from 'moment'
+
 import TaskForm from './TaskForm.vue'
 import DeleteTask from './DeleteTask.vue'
-import moment from 'moment'
+import TaskDetails from './TaskDetails.vue'
 
 export default {
     props: ['task'],
     components: {
         'app-task-form': TaskForm,
-        'app-delete-task': DeleteTask
+        'app-delete-task': DeleteTask,
+        'app-task-details': TaskDetails
     },
     data: function() {
         return {
             edit_task: false,
             delete_task: false,
+            display_details: false,
             isCompleted: this.task.completed
         }
     },

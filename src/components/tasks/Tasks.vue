@@ -88,7 +88,7 @@ export default {
             add_task: false,
             loading: false,
             filter: {
-                completed: false,
+                completed: null,
                 sortBy: 'createdAt:asc'
             }
         }
