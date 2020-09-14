@@ -56,11 +56,10 @@
         <div class="col-12 text-center" v-if="!loading && tasks.length == 0">
             <p>No tasks founds</p>
         </div>
-
-        <div class="col-12">
-            Displaying: {{ tasks.length }}
+       <div class="col-12" v-if="!loading && tasks.length > 0">
+            <p>Total records: {{ pagination.total_records }}</p>
         </div>
-        <div class="col-12" 
+        <div class="col-12"
             v-for="task of tasks" 
             :key="task._id">
             <app-task 
@@ -68,6 +67,34 @@
                 @task-updated="fetchTasks"
                 @task-deleted="fetchTasks"
             ></app-task>
+        </div>
+
+        <div class="col-12 my-2">
+            <div class="form-group float-left">
+                <label>Per page:</label>
+                <b-form-select 
+                    v-model="pagination.per_page" 
+                    :options="[
+                        { value: 2, text: '2' },
+                        { value: 10, text: '10' },
+                        { value: 50, text: '50' },
+                        { value: 100, text: '100' },
+                    ]"
+                ></b-form-select>
+            </div>
+            <div class="form-group float-right">
+                <label></label>
+                    <b-pagination
+                    v-model="pagination.current_page"
+                    :total-rows="pagination.total_records"
+                    :per-page="pagination.per_page"
+                    first-text="First"
+                    prev-text="Prev"
+                    next-text="Next"
+                    last-text="Last"
+                    >
+                </b-pagination>
+            </div>
         </div>
     </div>
 </template>
@@ -90,11 +117,22 @@ export default {
             filter: {
                 completed: null,
                 sortBy: 'createdAt:asc'
+            },
+            pagination: {
+                per_page: 2,
+                total_records: 0,
+                current_page: 1
             }
         }
     },
     watch: {
         filter: {
+            handler(){
+                this.fetchTasks()
+            },
+            deep: true
+        },
+        pagination: {
             handler(){
                 this.fetchTasks()
             },
@@ -108,13 +146,16 @@ export default {
         fetchTasks() {
             this.loading = true
             let data = {
-                ...this.filter
+                ...this.filter,
+                per_page: this.pagination.per_page,
+                current_page: this.pagination.current_page
             }
             axios.get('/tasks', {
                     params: data
                 })
                 .then(res => {
-                    this.tasks = res.data
+                    this.tasks = res.data.tasks
+                    this.pagination.total_records = res.data.pagination.total_records
                     this.loading = false
                 })
                 .catch(error => {
