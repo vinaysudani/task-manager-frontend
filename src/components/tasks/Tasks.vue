@@ -23,7 +23,7 @@
                 <label>Task status:</label>
                 <b-form-group>
                     <b-form-radio-group
-                        v-model="filter.completed"
+                        v-model="completed"
                         :options=" [
                             { text: 'All', value: null },
                             { text: 'Incomplete', value: false },
@@ -38,7 +38,7 @@
                 <label>Sort by:</label>
                  <b-form-group>
                     <b-form-select 
-                        v-model="filter.sortBy" 
+                        v-model="sortBy" 
                         :options="[
                             { value: 'createdAt:asc', text: 'Created At (Oldest first)' },
                             { value: 'createdAt:desc', text: 'Created At (Newest first)' },
@@ -57,7 +57,7 @@
             <p>No tasks founds</p>
         </div>
        <div class="col-12" v-if="!loading && tasks.length > 0">
-            <p>Total records: {{ pagination.total_records }}</p>
+            <p>Total records: {{ total_records }}</p>
         </div>
         <div class="col-12"
             v-for="task of tasks" 
@@ -73,9 +73,9 @@
             <div class="form-group float-left">
                 <label>Per page:</label>
                 <b-form-select 
-                    v-model="pagination.per_page" 
+                    v-model="per_page" 
                     :options="[
-                        { value: 2, text: '2' },
+                        { value: 5, text: '5' },
                         { value: 10, text: '10' },
                         { value: 50, text: '50' },
                         { value: 100, text: '100' },
@@ -84,10 +84,11 @@
             </div>
             <div class="form-group float-right">
                 <label></label>
-                    <b-pagination
-                    v-model="pagination.current_page"
-                    :total-rows="pagination.total_records"
-                    :per-page="pagination.per_page"
+                <b-pagination
+                    @change="pageChanged"
+                    v-model="current_page"
+                    :total-rows="total_records"
+                    :per-page="per_page"
                     first-text="First"
                     prev-text="Prev"
                     next-text="Next"
@@ -114,48 +115,53 @@ export default {
             tasks: [],
             add_task: false,
             loading: false,
-            filter: {
-                completed: null,
-                sortBy: 'createdAt:asc'
-            },
-            pagination: {
-                per_page: 2,
-                total_records: 0,
-                current_page: 1
-            }
+            completed: null,
+            sortBy: 'createdAt:asc',
+            per_page: 5,
+            total_records: 0,
+            current_page: 1
         }
     },
     watch: {
-        filter: {
-            handler(){
-                this.fetchTasks()
-            },
-            deep: true
+        per_page() {
+            this.current_page = 1
+            this.fetchTasks()
         },
-        pagination: {
-            handler(){
-                this.fetchTasks()
-            },
-            deep: true
+        completed() {
+            this.current_page = 1
+            this.fetchTasks()
+        },
+        sortBy() {
+            this.current_page = 1
+            this.fetchTasks()
         }
     },
     created() {
         this.fetchTasks()
     },
     methods: {
+        pageChanged(page) {
+            if (this.current_page == page){
+                return
+            }
+            this.current_page = page
+            this.fetchTasks()
+        },
         fetchTasks() {
             this.loading = true
             let data = {
-                ...this.filter,
-                per_page: this.pagination.per_page,
-                current_page: this.pagination.current_page
+                completed: this.completed,
+                sortBy: this.sortBy,
+                per_page: this.per_page,
+                current_page: this.current_page
             }
             axios.get('/tasks', {
                     params: data
                 })
                 .then(res => {
                     this.tasks = res.data.tasks
-                    this.pagination.total_records = res.data.pagination.total_records
+                    this.total_records = res.data.pagination.total_records
+                    this.current_page = res.data.pagination.current_page
                     this.loading = false
                 })
                 .catch(error => {
