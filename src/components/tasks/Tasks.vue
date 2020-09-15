@@ -167,6 +167,11 @@ export default {
                     this.total_records = res.data.pagination.total_records
                     this.current_page = res.data.pagination.current_page
                     this.loading = false
+
+                    if(this.current_page > 1 && this.tasks.length == 0) {
+                        this.current_page = 1
+                        this.fetchTasks()
+                    }
                 })
                 .catch(error => {
                    let message = 'Something went wrong'
