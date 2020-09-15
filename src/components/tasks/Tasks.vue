@@ -2,6 +2,13 @@
     <div class="row">
         <div class="col-12">
             <h1 class="float-left">Tasks</h1>
+            <div class="float-left ml-2 mt-3" v-if="loading">
+                <b-spinner
+                    label="Loading..." 
+                    small 
+                    variant="secondary"
+                ></b-spinner>
+            </div>
             <button
                 class="btn btn-primary float-right my-2" 
                 @click="add_task = true"
@@ -50,13 +57,10 @@
             </div>
         </div>
 
-        <div class="col-12 text-center my-1" v-if="loading">
-            <b-spinner label="Loading..." small variant="secondary"></b-spinner>
-        </div>
         <div class="col-12 text-center" v-if="!loading && tasks.length == 0">
             <p>No tasks founds</p>
         </div>
-       <div class="col-12" v-if="!loading && tasks.length > 0">
+        <div class="col-12" v-if="tasks.length > 0">
             <p>Total records: {{ total_records }}</p>
         </div>
         <div class="col-12"
