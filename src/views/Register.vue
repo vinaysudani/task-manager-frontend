@@ -106,11 +106,9 @@ export default {
             let registrationData = {
                 name: this.name,
                 email: this.email,
+                age: this.age,
                 password: this.password,
                 confirm_password: this.confirm_password
-            }
-            if (this.age) {
-                registrationData.age = this.age
             }
 
             axios.post('/users', registrationData)
