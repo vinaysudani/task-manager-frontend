@@ -16,7 +16,7 @@
             <div class="form-group">
                 <label for="name">Name*</label>
                 <input
-                    type="text" 
+                    type="text"
                     class="form-control"
                     :class="{ 'is-invalid' : formErrors.name }" 
                     id="name"
@@ -29,7 +29,7 @@
             <div class="form-group">
                 <label for="email">Email*</label>
                 <input 
-                    type="text" 
+                    type="text"
                     class="form-control" 
                     :class="{ 'is-invalid' : formErrors.email }" 
                     id="email"
@@ -41,7 +41,7 @@
             <div class="form-group">
                 <label for="age">Age</label>
                 <input 
-                    type="text" 
+                    type="text"
                     class="form-control"
                     :class="{ 'is-invalid' : formErrors.age }" 
                     id="age"
@@ -97,6 +97,37 @@ export default {
         },
         saveProfile() {
             this.submitting = true
+            let profileData = {
+                'name': this.user.name,
+                'email': this.user.email,
+                'age': this.user.age
+            }
+            axios.patch('/users/me', profileData)
+                .then(res => {
+                    let data = res.data
+                    this.user = data.user
+                    this.$store.dispatch('setUserName', data.user.name)
+                    this.displayToast('success', data.message)
+
+                    this.formErrors = {}
+                    this.error_message = ''
+                    this.submitting = false
+                })
+                .catch(error => {
+                   if (error.response && error.response.data && error.response.data.errors) {
+                        let data = error.response.data
+                        this.formErrors = data.errors
+                        this.error_message = data.message
+                    } else {
+                        let message = 'Something went wrong'
+                        if (error.response && error.response.data && error.response.data.message) {
+                            message = error.response.data.message
+                        }
+                        this.error_message = message
+                        this.formErrors = {}
+                    }
+                    this.submitting = false
+                })
         }
     }
 }
