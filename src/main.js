@@ -9,7 +9,7 @@ import mixin from './mixin'
 
 import './assets/style.scss'
 
-axios.defaults.baseURL = 'http://localhost:3000'
+axios.defaults.baseURL = process.env.VUE_APP_API_BASE_URL
 Vue.config.productionTip = false
 Vue.use(BootstrapVue)
 
