@@ -121,8 +121,7 @@ export default {
                         userName: data.user.name
                     }
                     this.$store.dispatch('setAuthData', authData)
-                    
-                    this.$router.push({ name: 'home'})
+                    this.$router.push({ name: 'tasks'})
 
                     this.formErrors = {}
                     this.error_message = ''

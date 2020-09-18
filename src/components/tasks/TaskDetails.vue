@@ -14,7 +14,7 @@
         <div class="col-12" v-if="!isLoading">
             <p><span class="text-muted">Title:</span> {{ task.title }}</p>
             <p><span class="text-muted">Description:</span> {{ task.description }}</p>
-            <p><span class="text-muted">Status:</span> {{ task.complete ? 'Complete' : 'Incomplete' }}</p>
+            <p><span class="text-muted">Status:</span> {{ task.completed ? 'Complete' : 'Incomplete' }}</p>
             <br>
             <p><span class="text-muted">Created At:</span> {{ localDateTime(task.createdAt) }}</p>
             <p><span class="text-muted">Updated At:</span> {{ localDateTime(task.updatedAt) }}</p>

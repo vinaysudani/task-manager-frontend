@@ -74,7 +74,7 @@
         </div>
 
         <div class="col-12 my-2">
-            <div class="form-group float-left">
+            <div class="form-group float-left" v-if="total_records > 0">
                 <label>Per page:</label>
                 <b-form-select 
                     v-model="per_page" 
@@ -86,7 +86,7 @@
                     ]"
                 ></b-form-select>
             </div>
-            <div class="form-group float-right">
+            <div class="form-group float-right" v-if="total_records > per_page">
                 <label></label>
                 <b-pagination
                     @change="pageChanged"

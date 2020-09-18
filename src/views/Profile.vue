@@ -6,7 +6,7 @@
         <div class="col-md-6 my-1">
             <app-change-password></app-change-password>
         </div>
-        <div class="col-md-6 my-1">
+        <div class="col-md-12 my-1">
             <app-delete-account></app-delete-account>
         </div>
     </div>
