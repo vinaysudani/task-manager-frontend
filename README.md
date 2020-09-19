@@ -1,24 +1,9 @@
-# task-manager-frontend
+# Task Manager - Frontend
 
-## Project setup
-```
-npm install
-```
+Vue.js Single Page Application(SPA) demostrating Task management features with user authentication.
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+### Demo url
+https://task-manager-frontend-01.herokuapp.com
 
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### Backend repository of this project
+https://github.com/vinaysudani/task-manager-api
