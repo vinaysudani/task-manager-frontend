@@ -17,33 +17,46 @@ const routes = [
     {
         path: '/',
         name: 'home',
-        component: Home
+        component: Home,
+        meta: {
+            title: 'Home'
+        }
     },
     {
         path: '/login',
         name: 'login',
         component: Login,
         beforeEnter: multiguard([guest]),
+        meta: {
+            title: 'Login'
+        }
     },
     {
         path: '/register',
         name: 'register',
         component: Register,
         beforeEnter: multiguard([guest]),
+        meta: {
+            title: 'Register'
+        }
     },
     {
         path: '/profile',
         name: 'profile',
         component: Profile,
-        meta: { requiresAuth: true },
         beforeEnter: multiguard([auth]),
+        meta: {
+            title: 'Profile'
+        }
     },
     {
         path: '/tasks',
         name: 'tasks',
         component: Tasks,
-        meta: { requiresAuth: true },
         beforeEnter: multiguard([auth]),
+        meta: {
+            title: 'Tasks'
+        }
     }
 ]
 
@@ -53,4 +66,8 @@ const router = new VueRouter({
     routes
 })
 
+router.beforeEach((to, from, next) => {
+    document.title = 'Task Manager - ' + to.meta.title
+    next()
+})
 export default router
