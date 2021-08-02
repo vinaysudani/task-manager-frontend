@@ -58,7 +58,7 @@
         </div>
 
         <div class="col-12 text-center" v-if="!loading && tasks.length == 0">
-            <p>No tasks founds</p>
+            <p>No tasks found</p>
         </div>
         <div class="col-12" v-if="tasks.length > 0">
             <p>Total records: {{ total_records }}</p>
